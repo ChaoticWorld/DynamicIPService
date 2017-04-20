@@ -1,0 +1,64 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DynamicIP_VPNDialer", "DynamicIP_VPNDialer", "{659D1E34-C0EC-4B93-8FBB-E3C672BD4A7C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DynamicIP_Service", "DynamicIP_Service", "{85ACB008-2414-4D7C-B00D-A7FDA3ED82E5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DynamicIP_IPRegister", "DynamicIP_IPRegister", "{C25FDF28-5D3A-4329-8945-5444F8ACFBF5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicIP", "DynamicIP\DynamicIP.csproj", "{0DC47948-6284-4AC2-A6B6-4B0778E18B8F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicIPService", "Service\MvcApplication\DynamicIPService.csproj", "{2B7B522B-877B-4E8E-BB0B-DC447EE6EDBE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IPRegister", "Register\IPRegister\IPRegister.csproj", "{8A2A94F6-E651-4636-ACBE-C0A1B3BCD4C1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{26D60FF5-DF73-47A5-A531-C129BD8CD310}"
+	ProjectSection(SolutionItems) = preProject
+		版本说明.txt = 版本说明.txt
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dialer", "Dialer\CreateAndDialVpnEntry\Dialer.csproj", "{20470E31-CF82-41B6-956A-ECC0EC1C1E40}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dataSource", "dataSource\dataSource.csproj", "{D785E030-A5C2-411D-928A-32378F6F4EBC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0DC47948-6284-4AC2-A6B6-4B0778E18B8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DC47948-6284-4AC2-A6B6-4B0778E18B8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DC47948-6284-4AC2-A6B6-4B0778E18B8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DC47948-6284-4AC2-A6B6-4B0778E18B8F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B7B522B-877B-4E8E-BB0B-DC447EE6EDBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B7B522B-877B-4E8E-BB0B-DC447EE6EDBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B7B522B-877B-4E8E-BB0B-DC447EE6EDBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B7B522B-877B-4E8E-BB0B-DC447EE6EDBE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A2A94F6-E651-4636-ACBE-C0A1B3BCD4C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A2A94F6-E651-4636-ACBE-C0A1B3BCD4C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A2A94F6-E651-4636-ACBE-C0A1B3BCD4C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A2A94F6-E651-4636-ACBE-C0A1B3BCD4C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20470E31-CF82-41B6-956A-ECC0EC1C1E40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20470E31-CF82-41B6-956A-ECC0EC1C1E40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20470E31-CF82-41B6-956A-ECC0EC1C1E40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20470E31-CF82-41B6-956A-ECC0EC1C1E40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D785E030-A5C2-411D-928A-32378F6F4EBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D785E030-A5C2-411D-928A-32378F6F4EBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D785E030-A5C2-411D-928A-32378F6F4EBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D785E030-A5C2-411D-928A-32378F6F4EBC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0DC47948-6284-4AC2-A6B6-4B0778E18B8F} = {85ACB008-2414-4D7C-B00D-A7FDA3ED82E5}
+		{2B7B522B-877B-4E8E-BB0B-DC447EE6EDBE} = {85ACB008-2414-4D7C-B00D-A7FDA3ED82E5}
+		{8A2A94F6-E651-4636-ACBE-C0A1B3BCD4C1} = {C25FDF28-5D3A-4329-8945-5444F8ACFBF5}
+		{20470E31-CF82-41B6-956A-ECC0EC1C1E40} = {659D1E34-C0EC-4B93-8FBB-E3C672BD4A7C}
+		{D785E030-A5C2-411D-928A-32378F6F4EBC} = {85ACB008-2414-4D7C-B00D-A7FDA3ED82E5}
+	EndGlobalSection
+EndGlobal

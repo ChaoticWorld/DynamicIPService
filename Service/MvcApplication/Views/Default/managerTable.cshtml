@@ -1,0 +1,181 @@
+﻿@using dataSource
+@model IEnumerable<dataViewModel>
+
+    <table>
+        <tr>
+            <th>操作</th>
+            <th>名称</th>
+            <th>vpn用户名</th>
+            <th>vpn密码</th>
+            <th>vpnMacAddr</th>
+            <th>外网IP</th>
+            <th>Key</th>
+            <th>登记时间</th>
+            <th>启用</th>
+        </tr>
+        @if (Model != null && Model.Count() > 0)
+        {
+            foreach (dataViewModel reg in Model)
+            {
+                <tr>
+                    <td>
+                        <button style="display:none" onclick="save(this)">保存</button>
+                        <button onclick="modify(this)">修改</button><button onclick="remove(this)">删除</button>
+                    </td>
+                    <td onclick='tdClick(this)'>@reg.Name</td>
+                    <td onclick='tdClick(this)'>@reg.vpnID</td>
+                    <td onclick='tdClick(this)'>@reg.vpnPW</td>
+                    <td onclick='tdClick(this)'>@reg.vpnMac</td>
+                    <td onclick='tdClick(this)'>@reg.vpnIP</td>
+                    <td onclick='tdClick(this)'>@reg.KEY</td>
+                    <td>@reg.modifyDate</td>
+                    @*<td onclick='tdClick(this)'>@reg.vpnEncryptionType</td>*@
+                    <td>@reg.enable</td>
+                </tr>
+            }
+        }
+        <tr id="lstRow"><td><button id="AddNew">新增</button></td><td colspan="10"></td></tr>
+    </table>
+
+<script type="text/javascript">
+    $(function () {
+        $("#AddNew").on("click", function () {
+            var newrow = ' <tr class="Modify">'
+                + '<td><button onclick="save(this)" >保存</button><button style="display:none" onclick="modify(this)">修改</button><button style="display:none" onclick="remove(this)">删除</button></td> '
+                + '<td onclick="tdClick(this)"></td> '
+                + '<td onclick="tdClick(this)"></td> <td onclick="tdClick(this)"></td>'
+                + ' <td onclick="tdClick(this)"></td> <td onclick="tdClick(this)"></td>'
+                + ' <td></td> <td></td>'
+                + ' <td></td></tr>';
+            $("#lstRow").before(newrow);
+        });
+    });
+</script>
+<script type="text/javascript">
+    function tdClick(td) {
+        if ($(td).is("td")) {
+            var row = $(td).parent()[0];
+            var cls = $(row).attr("class");
+            if ($(row).is(".Modify")) {
+                var h = $(td).css("height");
+                var w = $(td).css("width");
+                var txt = $(td).text();
+                if (!$(td).is(".tdedit")) {
+                    $(td).addClass("tdedit");
+                    var tdtxt = $(td).text().trim();
+                    var inputer = '<input onblur="tdInputTextBlur(this)"'
+                        + 'value ="' + tdtxt + '" />';
+                    $(td).html(inputer);
+                    $(td.children[0]).focus();
+                }
+            }
+        }
+    };
+</script>
+<script type="text/javascript">
+    function tdInputTextBlur(tdtxt) {
+        var v = $(tdtxt).val().trim();
+        var c = $(".tdedit")[0];
+        $(c).text(v);
+        $(c).removeClass("tdedit");
+        $(tdtxt).remove();
+    }
+</script>
+<script type="text/javascript">
+    function save(c) {
+        var cell = $(c).parent()[0];
+        var row = $(c).parent().parent()[0];
+        var name = $(row).children(":eq(1)").text().trim();
+        var vpnid = $(row).children(":eq(2)").text().trim();
+        var vpnpwd = $(row).children(":eq(3)").text().trim();
+        var mac = $(row).children(":eq(4)").text().trim();
+        var ip = $(row).children(":eq(5)").text().trim();
+        var key = $(row).children(":eq(6)").text().trim();
+        //var EncryptionType = $(row.children()[9]).text();
+        var EncryptionType = null;
+
+        $.ajax({
+            url: "/Default/update/",
+            data: { name: name, vpnid: vpnid, vpnpwd: vpnpwd, mac: mac, ip: ip,KEY:key, EncryptionType: EncryptionType },
+            type: "Post",
+            //async: false,
+            success: function (msg) {
+                if (msg) {
+                    reflushTableRow(row, msg);
+                }
+                else alert("保存失败");
+            }
+        });
+    }
+</script>
+<script type="text/javascript">
+    function modify(c) {
+        var cell = $(c).parent()[0];
+        var row = $(c).parent().parent()[0];
+        $(row).addClass("Modify");
+        $(cell).children(":eq(0)").css("display", "block");
+        $(cell).children(":eq(1)").css("display", "none");
+        $(cell).children(":eq(2)").css("display", "none");
+
+    }
+</script>
+<script type="text/javascript">
+    function remove(c) {
+        var row = $(c).parent().parent()[0];
+        var id = $(row).children(":eq(6)").text().trim();
+        $.post("/Default/Delete/" + id, {}, function (msg) {
+            if (msg > 0) {
+                alert("删除成功");
+                $(row).remove();
+            }
+            else alert("删除失败");
+        });
+    }
+</script>
+<script type="text/javascript">
+    function reflushPage() {
+        //刷新当前页面
+        location.reload()
+    }
+    function reflushTableRow(row, id) {
+        $.ajax({
+            url: "/Default/getUpdatedRow/" + id,
+            data: { KEY: id },
+            //async: false,
+            type: "Post",
+            success: function (vpn) {
+                var newrow = "";
+                if (vpn) {
+                    newrow = '<td><button style="display:none" onclick="save(this)" >保存</button><button onclick="modify(this)">修改</button><button onclick="remove(this)">删除</button></td> '
+                    + '<td onclick="tdClick(this)">' + vpn.Name + '</td>'
+                    + '<td onclick="tdClick(this)">' + vpn.vpnID + '</td>'
+                    + '<td onclick="tdClick(this)">' + (vpn.vpnPW ? vpn.vpnPW : "") + '</td>'
+                    + '<td onclick="tdClick(this)">' + (vpn.vpnMac ? vpn.vpnMac : "") + '</td>'
+                    + '<td onclick="tdClick(this)">' + (vpn.vpnIP ? vpn.vpnIP : "") + '</td>'
+                    + '<td>' + (vpn.KEY ? vpn.KEY : "") + '</td>'
+                    + '<td>' + timeStamp2String(dateJson2String(vpn.modifyDate)) + '</td>'
+                    + '<td>' + (vpn.enable ? vpn.enable : "") + '</td>';
+                }
+                $(row).removeClass("Modify");
+                $(row).html(newrow);
+            }
+        });
+    }
+</script>
+<script type="text/javascript">
+    function dateJson2String(t) {//MS JsonResult.Data 中的日期格式:/Date(123123123)/;取数字部分
+        time = t ? t.replace(/[^0-9]*/g, '') : 0;
+        return time;
+    }
+    function timeStamp2String(time) {//timeStamp日期时间字符串转为日期格式yyyy-mm-dd hh:MM:ss
+        var datetime = new Date();
+        datetime.setTime(time);
+        var year = datetime.getFullYear();
+        var month = datetime.getMonth() + 1 < 10 ? "0" + (datetime.getMonth() + 1) : datetime.getMonth() + 1;
+        var date = datetime.getDate() < 10 ? "0" + datetime.getDate() : datetime.getDate();
+        var hour = datetime.getHours() < 10 ? "0" + datetime.getHours() : datetime.getHours();
+        var minute = datetime.getMinutes() < 10 ? "0" + datetime.getMinutes() : datetime.getMinutes();
+        var second = datetime.getSeconds() < 10 ? "0" + datetime.getSeconds() : datetime.getSeconds();
+        return year + "-" + month + "-" + date + " " + hour + ":" + minute + ":" + second;
+    }
+</script>

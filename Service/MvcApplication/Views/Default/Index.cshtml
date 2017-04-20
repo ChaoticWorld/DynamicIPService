@@ -1,0 +1,135 @@
+﻿
+
+@{
+    ViewBag.Title = "Index";
+}
+<button onclick="Edit()">管理</button>
+<div id="Manager" style="display:none">
+    <h2>注册数据列表</h2>
+    <div id="managerTable"></div>
+    <hr />
+    <h2>批量导入</h2>
+    <p>
+        每条记录一行
+        格式：名称,id,pw
+    </p>
+    <textarea id="importArea" style="width:60%"></textarea>
+    <button onclick="doImport()">提交</button>
+    <hr />
+</div>
+<h2>服务测试</h2>
+<div>
+    <p>向服务器更新本地外网IP</p>
+    VPN的Key:<input type="text" id="vpnKEY" value="" />
+     新的IP: <input type="text" id="vpnIP" value="" />
+    <button onclick="RegisterIP()">注册最新IP地址</button>
+</div>
+<hr />
+<div>
+    <p>获得指定VPN的最新IP地址,</p>
+    <p id="getIP"></p>
+    请输入VPN的Key(多个KEY用,分隔):<input type="text" id="getVpnKEY" value="" />
+    <button onclick="getIP()">获得最新IP地址</button>
+</div>
+<div>
+    <p>刷新客户端异常</p>
+    <button onclick="flushException()">刷新异常</button>
+
+</div>
+<script type="text/javascript">
+    function flushException() {
+        $.get("/Default/flushClientException/server", { "id": "server" }, function (msg) {
+            alert(msg);
+        })
+    }
+</script>
+<script type="text/javascript">
+    function Edit() {
+        var d = $("#Manager").css("display");
+        
+        if (d == 'none') {
+            var authenCode = prompt("输入管理密码", "");
+            $.post("/Default/authen", { "authenCode": authenCode }, function (msg) {
+                if (true == msg)
+                {
+                    $("#Manager").css("display", "block");
+                    $("#managerTable").load("/Default/managerTable");
+                }
+            });
+        }
+        else {
+            $("#Manager").css("display", "none");
+            $("#managerTable").html("");
+        }
+      
+    }
+    function doImport() {
+        var DIPModels = new Array();
+        var strLists = $("#importArea").val();
+        /* Bug:前端分析数据传到控制器数组长度对，数组中的元素全为空
+        var list = strLists.split("\n");
+        var DynamicIPModel = new Object();
+        list.forEach(function (item) {
+            var elems = item.split(",");
+            DynamicIPModel = new Object();
+            if (elems.length > 0) {
+                DynamicIPModel.Name = elems[0];
+                DynamicIPModel.vpnID = elems[1];
+                DynamicIPModel.vpnPW = elems[2];
+                DynamicIPModel.vpnMac = "";
+                DynamicIPModel.KEY = "";
+                DynamicIPModel.vpnIP = "";
+                DynamicIPModel.vpnEncryptionType = "";
+            }
+            DIPModels.push(DynamicIPModel);
+        });
+        */
+        $.ajax({
+            url: "/Default/Import/im",
+            type: 'POST',
+            //async: false,
+            dataType: 'json',
+            //data: { "DIPModel": DIPModels },
+            data: { "DIPModelsString": strLists },
+            success: function (msg) {
+                if (msg) {
+                    alert(msg);
+                    reflushPage();
+                }
+                else alert("保存失败");
+            },
+            error: function (msg) {
+                alert(msg.data);
+            }
+        });
+    }
+</script>
+<script type="text/javascript">
+    function RegisterIP() {
+        var key = $("#vpnKEY").val();
+        var ip = $("#vpnIP").val();
+        $.post("/Default/RegisterIP", { Key: key, ip: ip }, function (msg) {
+            alert(msg);
+        })
+    }
+</script>
+<script type="text/javascript">
+    function getIP() {
+        var key = $("#getVpnKEY").val();
+        $.post("/Default/getIP/1",
+            { Keys: key },
+            function (msg) {
+                var ipMsg = "数量:";
+                ipMsg += msg.length;
+                ipMsg += ";<br/>";
+                $(msg).each(function () {
+                    ipMsg += this.Name;
+                    ipMsg += ",";
+                    ipMsg += this.vpnIP;
+                    ipMsg += ".<br/>";
+                })
+                $("#getIP").html(ipMsg);
+            });
+    }
+</script>
+
